@@ -1,14 +1,13 @@
 
 - PathFinder -
 
-Antoine Fournier - ENJMIN 2014
-afournier.enjmin@gmail.com
+Antoine Fournier - afournier.dev@gmail.com
 
 
-Le PathFinder est un système de pathfinding pour le moteur MyNecraft.
-Il implémente l'algorithme A* pour effectuer une recherche sur une version 2D le la carte généré.
+Le PathFinder est un systÃ¨me de pathfinding pour le moteur MyNecraft.
+Il implÃ©mente l'algorithme A* pour effectuer une recherche sur une version 2D le la carte gÃ©nÃ©rÃ©.
 Il permet de partager le calcul d'un chemin sur plusieurs frames ainsi que le lancement de plusieurs
-calculs en parallèle afin de ne pas bloquer l'affichage lors de calculs lourds.
+calculs en parallÃ¨le afin de ne pas bloquer l'affichage lors de calculs lourds.
 
 
 
@@ -16,11 +15,11 @@ calculs en parallèle afin de ne pas bloquer l'affichage lors de calculs lourds.
 // Installation //
 //////////////////
 
-Tous les fichiers sont présents dans le dossier Pathfinding qui doit être ajouté à la solution du projet.
+Tous les fichiers sont prÃ©sents dans le dossier Pathfinding qui doit Ãªtre ajoutÃ© Ã  la solution du projet.
 
-La class PathFinder est utilisée comme interface principale pour l'utilisation des fonctionnalitées.
-Tout les éléments sont placés dans le namespace fournier.
-PathFinder est un Singleton. Récupérer l'instance de la class se fait de la manière suivante :
+La class PathFinder est utilisÃ©e comme interface principale pour l'utilisation des fonctionnalitÃ©es.
+Tout les Ã©lÃ©ments sont placÃ©s dans le namespace fournier.
+PathFinder est un Singleton. RÃ©cupÃ©rer l'instance de la class se fait de la maniÃ¨re suivante :
 
 fournier::PathFinder::getInstance();
 
@@ -30,15 +29,15 @@ fournier::PathFinder::getInstance();
 // Initialisation //
 ////////////////////
 
-L'initialisation du PathFinder se fait dans la fonction main() après la création et l'initialisation du world.
+L'initialisation du PathFinder se fait dans la fonction main() aprÃ¨s la crÃ©ation et l'initialisation du world.
 
 void PathFinder::initialize(NYWorld* _world)
 
-Le PathFinder va récupérer les blocs et les chunks créés lors de la génération du monde
-et en reproduire une version interne optimisé pour les calculs.
+Le PathFinder va rÃ©cupÃ©rer les blocs et les chunks crÃ©Ã©s lors de la gÃ©nÃ©ration du monde
+et en reproduire une version interne optimisÃ© pour les calculs.
 
-En cas de besoin de réinitialiser l'ensemble du PathFinder et de sa représentation interne du World,
-la méthode suivante peut être appellée, après quoi un ere-initialisation du PathFinder est requise.
+En cas de besoin de rÃ©initialiser l'ensemble du PathFinder et de sa reprÃ©sentation interne du World,
+la mÃ©thode suivante peut Ãªtre appellÃ©e, aprÃ¨s quoi un ere-initialisation du PathFinder est requise.
 
 void PathFinder::reset()
 
@@ -50,72 +49,72 @@ void PathFinder::reset()
 
 bool PathFinder::findPath(PathParam *_parameters, PathResult *_result)
 
-Cette méthode lance le calcul d'un chemin en fonction des paramètres donnés.
-Dans le cas où aucun chemin n'est trouvé, le résultat contiendra un des chemins les plus prometteurs.
+Cette mÃ©thode lance le calcul d'un chemin en fonction des paramÃ¨tres donnÃ©s.
+Dans le cas oÃ¹ aucun chemin n'est trouvÃ©, le rÃ©sultat contiendra un des chemins les plus prometteurs.
 
-_parameters : contients les paramètres du calcul.
-_result : contiendra le résultat de la recherche.
+_parameters : contients les paramÃ¨tres du calcul.
+_result : contiendra le rÃ©sultat de la recherche.
 
-Les deux paramètres sont expliqués plus bas dans ce documents.
-La méthode retourne true si la recherche à pu être lancée avec succès.
-Si une erreur a été rencontrée (paramètres invalides), false est retourné.
+Les deux paramÃ¨tres sont expliquÃ©s plus bas dans ce documents.
+La mÃ©thode retourne true si la recherche Ã  pu Ãªtre lancÃ©e avec succÃ¨s.
+Si une erreur a Ã©tÃ© rencontrÃ©e (paramÃ¨tres invalides), false est retournÃ©.
 
 
 
 /////////////////////////
-// Utilisation avancée //
+// Utilisation avancÃ©e //
 /////////////////////////
 
-Le PathFinder permet de diviser les calculs sur plusieurs frames afin d'éviter les freezes lors de lancement de calculs
-sur des cartes complexes ou lorsque plusieurs calculs sont lancé lors de la même frame par exemple.
+Le PathFinder permet de diviser les calculs sur plusieurs frames afin d'Ã©viter les freezes lors de lancement de calculs
+sur des cartes complexes ou lorsque plusieurs calculs sont lancÃ© lors de la mÃªme frame par exemple.
 
-Afin de pouvoir utiliser cette fonctionnalité, l'appel à la methode update doit être fait à chaque frame.
-Dans la méthode update() du fichier main.cpp, appellez :
+Afin de pouvoir utiliser cette fonctionnalitÃ©, l'appel Ã  la methode update doit Ãªtre fait Ã  chaque frame.
+Dans la mÃ©thode update() du fichier main.cpp, appellez :
 
 void PathFinder::update()
 
 
-La méthode pour lancer une recherche est la suivante :
+La mÃ©thode pour lancer une recherche est la suivante :
 
 int startSearch(PathParam *_parameters, PathResult *_result, void(*_callback)(int, PathParam*, PathResult*))
 
-_parameters : contients les paramètres du calcul.
-_result : contiendra le résultat de la recherche.
-_callback : méthode qui va être appelée lorsque le PathFinder aura terminé la recherche.
+_parameters : contients les paramÃ¨tres du calcul.
+_result : contiendra le rÃ©sultat de la recherche.
+_callback : mÃ©thode qui va Ãªtre appelÃ©e lorsque le PathFinder aura terminÃ© la recherche.
 
-Les deux premiers paramètres ne doivent pas être nulls et les instances des objects ne doivent pas être détruites
-avant que la méthode de callback soit appelée. Ils correspondent au paramètres de findPath().
-Lors de l'appel du callback les deux objets donnés en paramètres sont retournés afin de pouvoir être détruit
-par l'utilisateur qui les a initialisés.
+Les deux premiers paramÃ¨tres ne doivent pas Ãªtre nulls et les instances des objects ne doivent pas Ãªtre dÃ©truites
+avant que la mÃ©thode de callback soit appelÃ©e. Ils correspondent au paramÃ¨tres de findPath().
+Lors de l'appel du callback les deux objets donnÃ©s en paramÃ¨tres sont retournÃ©s afin de pouvoir Ãªtre dÃ©truit
+par l'utilisateur qui les a initialisÃ©s.
 
-La méthode retourne -1 si une erreur est survenue.
-Si la valeur est supérieure a 0, elle correspond à l'identifiant de la recherche.
-Cet identifiant unique sera donnée par la méthode de callback et permet de savoir quelle recherche s'est terminée.
+La mÃ©thode retourne -1 si une erreur est survenue.
+Si la valeur est supÃ©rieure a 0, elle correspond Ã  l'identifiant de la recherche.
+Cet identifiant unique sera donnÃ©e par la mÃ©thode de callback et permet de savoir quelle recherche s'est terminÃ©e.
 
 
-La méthode de callback est appelée lorsqu'une recherche est terminée et doit avoir la signature suivante :
+La mÃ©thode de callback est appelÃ©e lorsqu'une recherche est terminÃ©e et doit avoir la signature suivante :
 
 void callback(int, PathParam*, PathResult*)
 
-_id : identifiant unique de la recherche qui s'est terminée.
-_parameters : objet passé lors de l'appel à startSearch.
-_result : contiendra le résultat de la recherche.
+_id : identifiant unique de la recherche qui s'est terminÃ©e.
+_parameters : objet passÃ© lors de l'appel Ã  startSearch.
+_result : contiendra le rÃ©sultat de la recherche.
 
 
-Le PathFinder permet de spécifier le nombre de microsecondes qu'il peut passer à chaque frame pour le calcul des chemins via
-la méthode suivante :
+Le PathFinder permet de spÃ©cifier le nombre de microsecondes qu'il peut passer Ã  chaque frame pour le calcul des chemins via
+la mÃ©thode suivante :
 
 void PathFinder::setAllowedComputeTimePerFrame(long _microseconds)
 
-Cette valeur peut être changée à n'importe quel moment.
-Par défaut le PathFinder peut passer 5 millisecondes maximum par frame (5000 us) à faire ses calculs.
+Cette valeur peut Ãªtre changÃ©e Ã  n'importe quel moment.
+Par dÃ©faut le PathFinder peut passer 5 millisecondes maximum par frame (5000 us) Ã  faire ses calculs.
 
 
 ///////////////
 // Obstacles //
 ///////////////
 
-Le PathFinder permet de marquer certaines position comme n'étant pas praticable via la méthode :
+Le PathFinder permet de marquer certaines position comme n'Ã©tant pas praticable via la mÃ©thode :
 
 void PathFinder::setObstacle(const WorldPosition &_position, bool _hasObstacle)
 
@@ -123,32 +122,32 @@ void PathFinder::setObstacle(const WorldPosition &_position, bool _hasObstacle)
 
 
 ////////////////
-// Paramètres //
+// ParamÃ¨tres //
 ////////////////
 
  - PathParam -
 
-Cet objet contient l'ensemble des paramètres d'une recherche.
-Tout ses membres peuvent être défini via le constructeur ou en accès direct.
+Cet objet contient l'ensemble des paramÃ¨tres d'une recherche.
+Tout ses membres peuvent Ãªtre dÃ©fini via le constructeur ou en accÃ¨s direct.
 
 startPosition : position d'origine de la recherche.
 endPosition : position cible de la recherche.
-walkableCubeTypeList : liste des types de cube (NYCubeType) qui sont considéré comme praticables. Le chemin ne peut passer que sur ces types de cubes. Si aucun type de cube n'est donné, tous sont considérés comme praticables.
-allowDiagonalMovements : indique si le passage d'un cube à l'autre se fait en considérant les 4 ou 8 voisins du cube.
-maximumJunmpHeight : différence en hauteur maximale autorisée pour le passage d'un cube vers un cube voisin plus haut.
-maximumFallHeight: différence en hauteur maximale autorisée pour le passage d'un cube vers un cube voisin plus bas.
+walkableCubeTypeList : liste des types de cube (NYCubeType) qui sont considÃ©rÃ© comme praticables. Le chemin ne peut passer que sur ces types de cubes. Si aucun type de cube n'est donnÃ©, tous sont considÃ©rÃ©s comme praticables.
+allowDiagonalMovements : indique si le passage d'un cube Ã  l'autre se fait en considÃ©rant les 4 ou 8 voisins du cube.
+maximumJunmpHeight : diffÃ©rence en hauteur maximale autorisÃ©e pour le passage d'un cube vers un cube voisin plus haut.
+maximumFallHeight: diffÃ©rence en hauteur maximale autorisÃ©e pour le passage d'un cube vers un cube voisin plus bas.
 
 
  - PathResult -
 
-Cet objet contient le résultat d'une recherche ainsi que certaines informations de performances.
+Cet objet contient le rÃ©sultat d'une recherche ainsi que certaines informations de performances.
 
-isPathFound : indique si un chemin allant de l'origine à la destination à pû être trouvé.
-waypointsList : vecteur contenant l'ensemble des points de passage du chemin. Si aucun chemin n'est trouvé, la liste contient un chemin aléatoire.
-totalComputeTime : nombre total de microsecondes passées à faire le calcul.
-AStarComputeTime : nombre de microsecondes passées uniquement à la recherche du chemin.
-waypointsCreationTime : ombre de microsecondes passées uniquement à la construction des points de passages.
-numberNodeChecked : nombre de node de l'algorithme A* considérés lors de la recherche.
+isPathFound : indique si un chemin allant de l'origine Ã  la destination Ã  pÃ» Ãªtre trouvÃ©.
+waypointsList : vecteur contenant l'ensemble des points de passage du chemin. Si aucun chemin n'est trouvÃ©, la liste contient un chemin alÃ©atoire.
+totalComputeTime : nombre total de microsecondes passÃ©es Ã  faire le calcul.
+AStarComputeTime : nombre de microsecondes passÃ©es uniquement Ã  la recherche du chemin.
+waypointsCreationTime : ombre de microsecondes passÃ©es uniquement Ã  la construction des points de passages.
+numberNodeChecked : nombre de node de l'algorithme A* considÃ©rÃ©s lors de la recherche.
 
 
 
@@ -159,17 +158,17 @@ numberNodeChecked : nombre de node de l'algorithme A* considérés lors de la rech
 
 - 1 -
 
-Ces deux méthodes permettent de savoir combien de recherches sont actuellement en cours de calcul et quels sont leurs Ids :
+Ces deux mÃ©thodes permettent de savoir combien de recherches sont actuellement en cours de calcul et quels sont leurs Ids :
 
 int PathFinder::getNumberSearchRunning() const
 vector<int> PathFinder::getRunningSearchIds() const
 
 - 2 -
 
-Les seuls cas où vous n'avez pas à gérer la désallocation des objets PathParam et PathResult sont les suivants :
+Les seuls cas oÃ¹ vous n'avez pas Ã  gÃ©rer la dÃ©sallocation des objets PathParam et PathResult sont les suivants :
 - le PathFinder est reset via reset()
-- une recherche est annulée via stopSearch()
-- une recherche est annulée via l'utilisation de setObstacle()
+- une recherche est annulÃ©e via stopSearch()
+- une recherche est annulÃ©e via l'utilisation de setObstacle()
 
 
 //////////////
@@ -179,22 +178,22 @@ Les seuls cas où vous n'avez pas à gérer la désallocation des objets PathParam e
 
  - 1 -
 
-Lancement d'un calcul simple entre deux points aléatoires de la carte.
-La liste des points de passages est écrite dans la console.
+Lancement d'un calcul simple entre deux points alÃ©atoires de la carte.
+La liste des points de passages est Ã©crite dans la console.
 
 
 // Vecteur contenant les types de cubes praticables
 // Le chemin peut passer par des cubes Herbe ou Terre uniquement
-// Laisser le vecteur vide correspond à { CUBE_HERBE, CUBE_TERRE, CUBE_EAU }
+// Laisser le vecteur vide correspond Ã  { CUBE_HERBE, CUBE_TERRE, CUBE_EAU }
 // Dans tout les cas le type CUBE_AIR n'est pas pris en compte
 vector<NYCubeType> types = { CUBE_HERBE, CUBE_TERRE };
 
-// Paramètre de la recherche
+// ParamÃ¨tre de la recherche
 // On recherche un chemin entre la position (10, 10) et (35, 46)
-// Le PathFinder va s'occuper de trouver la position en Z des cubes correspondants aux position (X, Y) données
+// Le PathFinder va s'occuper de trouver la position en Z des cubes correspondants aux position (X, Y) donnÃ©es
 fournier::PathParam params(fournier::WorldPosition(10, 10, 0), fournier::WorldPosition(35, 46, 0), types);
 
-// Le résultat sera contenu dans cet objet
+// Le rÃ©sultat sera contenu dans cet objet
 fournier::PathResult result = fournier::PathResult();
 
 // Lance le calcul
@@ -204,11 +203,11 @@ if (fournier::PathFinder::getInstance()->findPath(&params, &result) == false)
 	return;
 }
 
-// Affiche la durée du calcul
+// Affiche la durÃ©e du calcul
 cout << "Time: " << result.totalComputeTime << "uS - (A*: " << result.AStarComputeTime << "us - Waypoints creation: " << result.waypointsCreationTime << "us)" << endl;
 cout << "Number node checked: " << result.numberNodeChecked << endl;
 
-// Si un chemin a été trouvé, écrit la position de tout les points de passage dans la console
+// Si un chemin a Ã©tÃ© trouvÃ©, Ã©crit la position de tout les points de passage dans la console
 if (result.isPathFound)
 {
 	std::cout << "Number node in path: " << result.waypointsList.size() << std::endl;
@@ -220,23 +219,23 @@ if (result.isPathFound)
 
  - 2 -
 
-Lancement d'un calcul simple entre deux points aléatoires de la carte.
-Ce calcul est divisé sur plusieurs frames.
-La liste des points de passages est écrite dans la console lorsque la recherche est terminée.
+Lancement d'un calcul simple entre deux points alÃ©atoires de la carte.
+Ce calcul est divisÃ© sur plusieurs frames.
+La liste des points de passages est Ã©crite dans la console lorsque la recherche est terminÃ©e.
 
 
-Pour fonctionner, assurez vous d'appeler dans la méthode update() du fichier main.cpp :
+Pour fonctionner, assurez vous d'appeler dans la mÃ©thode update() du fichier main.cpp :
 
 fournier::PathFinder::getInstance()->update();
 
 
 - Lancement de la recherche:
 
-// Les paramètres sont les même que pour un calcul simple
+// Les paramÃ¨tres sont les mÃªme que pour un calcul simple
 fournier::PathParam *params = new fournier::PathParam(fournier::WorldPosition(rand() % MAT_SIZE_CUBES, rand() % MAT_SIZE_CUBES, 0), fournier::WorldPosition(rand() % MAT_SIZE_CUBES, rand() % MAT_SIZE_CUBES, 0), types);
 fournier::PathResult *result = new fournier::PathResult();
 
-// Lance la recherche, on stocke l'identifiant retourné dans une variable globale
+// Lance la recherche, on stocke l'identifiant retournÃ© dans une variable globale
 mySearId = fournier::PathFinder::getInstance()->startSearch(params, result, pathCallback);
 
 if (mySearId == -1)
@@ -246,16 +245,16 @@ if (mySearId == -1)
 }
 
 
-- Résultats de la recherche:
+- RÃ©sultats de la recherche:
 
-// Cette méthode sera appellée par le PathFinder lorque un résultat sera trouvé
+// Cette mÃ©thode sera appellÃ©e par le PathFinder lorque un rÃ©sultat sera trouvÃ©
 void pathCallback(int _id, fournier::PathParam *_params, fournier::PathResult *_result)
 {
-	// Ici, si on a lancé une seul recherche (_id == mySearId)
+	// Ici, si on a lancÃ© une seul recherche (_id == mySearId)
 
 	std::cout << "Search done: " << _id << std::endl;
 	
-	// Si un chemin a été trouvé, écrit la position de tout les points de passage dans la console
+	// Si un chemin a Ã©tÃ© trouvÃ©, Ã©crit la position de tout les points de passage dans la console
 	if (_result.isPathFound)
 	{
 		std::cout << "Number node in path: " << _result.waypointsList.size() << std::endl;
@@ -263,7 +262,7 @@ void pathCallback(int _id, fournier::PathParam *_params, fournier::PathResult *_
 			std::cout << (*it).x << "," << (*it).y << "," << (*it).z << std::endl;
 	}
 
-	// On release la mémoire alloué lors du lancement de la recherche un fois qu'on a récupéré les données que l'on souhaite
+	// On release la mÃ©moire allouÃ© lors du lancement de la recherche un fois qu'on a rÃ©cupÃ©rÃ© les donnÃ©es que l'on souhaite
 	delete _params;
 	delete _result;
 }
