@@ -1,6 +1,7 @@
 PathFinder
-FOURNIER Antoine - afournier.dev@gmail.com
 ==========
+
+FOURNIER Antoine - afournier.dev@gmail.com
 
 PathFinder is a 2D A* pathfinding implemented in C++ initially set up for a Minecraft like project.
 It is actually linked to this project but can be easily imported into another project with minimum changes.
